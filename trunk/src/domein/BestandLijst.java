@@ -30,7 +30,7 @@ public class BestandLijst {
     List<Bestand> bestanden;
 
     public BestandLijst() {
-         bestanden = new ArrayList<Bestand>();
+        bestanden = new ArrayList<Bestand>();
         saveFiles();
 
     }
@@ -68,14 +68,11 @@ public class BestandLijst {
 
     }
 
-    public List<Bestand> getFiles() {
-
+    public List<Bestand> getBestanden() {
         return bestanden;
-
     }
-
     public void saveFiles() {
-       
+
 
         File pathName = new File(getDirectory());
         File[] files = pathName.listFiles();
@@ -86,10 +83,13 @@ public class BestandLijst {
 
                 bestanden.add(b);
             }
-
         }
+    }
 
-
+    public File[] GetFiles() {
+        File pathName = new File(getDirectory());
+        File[] files = pathName.listFiles();
+        return files;
     }
 }
 
