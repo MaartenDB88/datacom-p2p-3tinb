@@ -5,10 +5,13 @@
 package domein;
 
 import domein.BestandLijst;
+import netwerk.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
@@ -18,6 +21,7 @@ public class DomeinController {
 
     List<Bestand> files;
     private BestandLijst bestandLijst;
+    BestandTableModel model;
 
     public DomeinController() {
         files = new ArrayList<Bestand>();
@@ -25,17 +29,29 @@ public class DomeinController {
 
     }
 
-    public List<Bestand> getFiles() {
+    public List<Bestand> getBestanden() {
         return files;
     }
 
     public void addFile(Bestand bestand) {
         files.add(bestand);
-    }
+        model.update();
 
+    }
+/*
     public void createLijst() {
         files = new ArrayList<Bestand>();
         files = bestandLijst.getFiles();
+        model.fireTableDataChanged();
+    }*/
+    public void createLijst()
+    {
+        /*
+        ExecutorService threadExecutor = Executors.newFixedThreadPool(2);
+        threadExecutor.execute(new MulticastServerThread());
+        threadExecutor.execute(new UDPReceive());
+        threadExecutor.shutdown();
+         */
     }
 
     public void setSharedDirectory(String path) {
@@ -43,10 +59,17 @@ public class DomeinController {
 
     }
 
-    public void createLijst(BestandTableModel bt) {
-
-        createLijst();
-        bt.fireTableDataChanged();
-
+    public BestandTableModel getModel() {
+        return model;
     }
+
+    public void setModel(BestandTableModel model) {
+        this.model = model;
+    }
+
+    public File[] getFiles()
+    {
+       return bestandLijst.GetFiles();
+    }
+
 }

@@ -18,6 +18,8 @@ import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
 
+import netwerk.ReceiveList;
+
 /**
  *
  * @author Administrator
@@ -32,8 +34,9 @@ public class Main extends javax.swing.JFrame {
     public Main(DomeinController controller) {
         this.controller = controller;
         tableModel = new BestandTableModel(controller);
+        controller.setModel(tableModel);
         initComponents();
-        new Thread();
+       
 
     }
 
@@ -198,7 +201,13 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        controller.createLijst(tableModel);
+
+      //  new MulticastServerThread().run();
+        ExecutorService threadExecutor = Executors.newFixedThreadPool(2);
+      //  threadExecutor.execute(new MulticastServerThread());
+        threadExecutor.execute(new ReceiveList(controller));
+        threadExecutor.shutdown();
+        //controller.createLijst();
 
 
 
