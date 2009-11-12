@@ -12,6 +12,8 @@ package gui;
 
 import domein.BestandTableModel;
 import domein.DomeinController;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.AbstractListModel;
@@ -31,11 +33,21 @@ public class Main extends javax.swing.JFrame {
     String stopRefresh = null;
     private BestandTableModel tableModel;
     ExecutorService threadExecutor = null;
+    ReceiveList r ;
 
-    public Main(DomeinController controller) {
+    public Main(DomeinController controller){
         this.controller = controller;
         tableModel = new BestandTableModel(controller);
         controller.setModel(tableModel);
+       try
+       {
+        r = new ReceiveList(controller,new ServerSocket(13267));
+       }
+       catch(Exception e)
+       {
+           System.out.println(e.getMessage());
+
+       }
         initComponents();
        
 
@@ -202,23 +214,17 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-/*    if(threadExecutor!=null)
-    {
-        threadExecutor.shutdown();        
-      //  new MulticastServerThread().run();       
-      //  threadExecutor.execute(new MulticastServerThread());
-    //controller.createLijst();
-    }*/
 
+    controller.deleteList();
     threadExecutor = Executors.newFixedThreadPool(2);
-    threadExecutor.execute(new ReceiveList(controller));
+    threadExecutor.execute(r);
+
     threadExecutor.shutdown();
-
-
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    
+       System.out.println("STOP HAMMERTIME!!!");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void direcotyMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_direcotyMenuItemActionPerformed

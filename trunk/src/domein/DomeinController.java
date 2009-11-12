@@ -22,7 +22,7 @@ public class DomeinController {
     List<Bestand> files;
     private BestandLijst bestandLijst;
     BestandTableModel model;
-
+    
     public DomeinController() {
         files = new ArrayList<Bestand>();
         bestandLijst = new BestandLijst();
@@ -38,22 +38,6 @@ public class DomeinController {
         model.update();
 
     }
-/*
-    public void createLijst() {
-        files = new ArrayList<Bestand>();
-        files = bestandLijst.getFiles();
-        model.fireTableDataChanged();
-    }*/
-    public void createLijst()
-    {
-        /*
-        ExecutorService threadExecutor = Executors.newFixedThreadPool(2);
-        threadExecutor.execute(new MulticastServerThread());
-        threadExecutor.execute(new UDPReceive());
-        threadExecutor.shutdown();
-         */
-    }
-
     public void setSharedDirectory(String path) {
         bestandLijst.setDirectory(path);
 
@@ -70,6 +54,11 @@ public class DomeinController {
     public File[] getFiles()
     {
        return bestandLijst.GetFiles();
+    }
+
+    public void deleteList()
+    {
+        files = new ArrayList<Bestand>();
     }
 
 }

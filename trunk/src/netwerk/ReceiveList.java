@@ -32,30 +32,29 @@ public class ReceiveList implements Runnable {
 
     DomeinController controller;
     DatagramSocket dgSocket = null;
+    boolean test = true;
+    ServerSocket servsock;
 
-    public ReceiveList(DomeinController c) {
+    public ReceiveList(DomeinController c, ServerSocket s) {
         controller = c;
+        servsock = s;
 
     }
 
     public void run() {
         try {
-
             dgSocket = new DatagramSocket(4445);
-
-
             byte[] buffer = new byte[256];
             String dString = "!!";
             buffer = dString.getBytes();
-
             // send it
             InetAddress group = InetAddress.getByName("230.0.0.1");
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, 4446);
             dgSocket.send(packet);
+            dgSocket.close();
 
-            ServerSocket servsock = new ServerSocket(13267);
+            
             while (true) {
-
                 //System.out.println("Gimme the goods");
                 Socket sock = servsock.accept();
                 //Socket sock = new Socket("127.0.0.1", 13267);
@@ -64,14 +63,16 @@ public class ReceiveList implements Runnable {
                 ObjectInputStream o = new ObjectInputStream(is);
 
                 File[] files = (File[]) o.readObject();
-                o.close();
-                sock.close();
-
-
                 for (File f : files) {
                     controller.addFile(new Bestand(f, sock.getLocalAddress().toString()));
                 }
+                o.close();
+                sock.close();
+                
+              
             }
+              
+              
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ReceiveList.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SocketException ex) {
@@ -83,4 +84,5 @@ public class ReceiveList implements Runnable {
 
 
     }
+
 }
