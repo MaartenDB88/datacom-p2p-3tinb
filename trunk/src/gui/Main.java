@@ -30,6 +30,7 @@ public class Main extends javax.swing.JFrame {
     DomeinController controller;
     String stopRefresh = null;
     private BestandTableModel tableModel;
+    ExecutorService threadExecutor = null;
 
     public Main(DomeinController controller) {
         this.controller = controller;
@@ -201,13 +202,17 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-      //  new MulticastServerThread().run();
-        ExecutorService threadExecutor = Executors.newFixedThreadPool(2);
+/*    if(threadExecutor!=null)
+    {
+        threadExecutor.shutdown();        
+      //  new MulticastServerThread().run();       
       //  threadExecutor.execute(new MulticastServerThread());
-        threadExecutor.execute(new ReceiveList(controller));
-        threadExecutor.shutdown();
-        //controller.createLijst();
+    //controller.createLijst();
+    }*/
+
+    threadExecutor = Executors.newFixedThreadPool(2);
+    threadExecutor.execute(new ReceiveList(controller));
+    threadExecutor.shutdown();
 
 
 

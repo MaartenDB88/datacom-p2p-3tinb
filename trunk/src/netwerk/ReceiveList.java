@@ -14,9 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.logging.Level;
@@ -29,6 +31,7 @@ import java.util.logging.Logger;
 public class ReceiveList implements Runnable {
 
     DomeinController controller;
+    DatagramSocket dgSocket = null;
 
     public ReceiveList(DomeinController c) {
         controller = c;
@@ -37,7 +40,10 @@ public class ReceiveList implements Runnable {
 
     public void run() {
         try {
-            DatagramSocket dgSocket = new DatagramSocket(4445);
+
+            dgSocket = new DatagramSocket(4445);
+
+
             byte[] buffer = new byte[256];
             String dString = "!!";
             buffer = dString.getBytes();
@@ -47,23 +53,23 @@ public class ReceiveList implements Runnable {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, 4446);
             dgSocket.send(packet);
 
-
+            ServerSocket servsock = new ServerSocket(13267);
             while (true) {
 
-                System.out.println("Gimme the goods");
-                Socket sock = new Socket("127.0.0.1", 13267);
-  
+                //System.out.println("Gimme the goods");
+                Socket sock = servsock.accept();
+                //Socket sock = new Socket("127.0.0.1", 13267);
+
                 InputStream is = sock.getInputStream();
-                ObjectInputStream o = new ObjectInputStream(is);               
+                ObjectInputStream o = new ObjectInputStream(is);
 
                 File[] files = (File[]) o.readObject();
                 o.close();
-
                 sock.close();
 
-                for(File f:files)
-                {
-                controller.addFile(new Bestand(f, sock.getLocalAddress().toString()));
+
+                for (File f : files) {
+                    controller.addFile(new Bestand(f, sock.getLocalAddress().toString()));
                 }
             }
         } catch (ClassNotFoundException ex) {
