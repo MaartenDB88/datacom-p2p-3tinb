@@ -17,6 +17,7 @@ public class Run {
 
     private static DomeinController c = new DomeinController();
     private static Main mainFrame = new Main(c);
+   
 
     public static void main(String[] arg) {
         java.awt.EventQueue.invokeLater(new Runnable() {
