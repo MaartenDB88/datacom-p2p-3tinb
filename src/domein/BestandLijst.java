@@ -4,22 +4,16 @@
  */
 package domein;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -31,9 +25,7 @@ public class BestandLijst {
 
     public BestandLijst() {
         bestanden = new ArrayList<Bestand>();
-        saveFiles();
-
-    }
+          }
 
     public String getDirectory() {
         String directory = null;
@@ -67,10 +59,7 @@ public class BestandLijst {
 
 
     }
-
-    public List<Bestand> getBestanden() {
-        return bestanden;
-    }
+/*
     public void saveFiles() {
 
 
@@ -85,11 +74,21 @@ public class BestandLijst {
             }
         }
     }
+ */
 
-    public File[] GetFiles() {
+    public List<Bestand> GetFiles() {
         File pathName = new File(getDirectory());
         File[] files = pathName.listFiles();
-        return files;
+        
+        Bestand b;
+        for (File f : files) {
+            if (f.isFile()) {
+                b = new Bestand(f, f.length());
+
+                bestanden.add(b);
+            }
+        }
+        return bestanden;
     }
 }
 

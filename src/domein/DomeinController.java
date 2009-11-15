@@ -42,16 +42,11 @@ public class DomeinController {
         bestandLijst.setDirectory(path);
 
     }
-
-    public BestandTableModel getModel() {
-        return model;
-    }
-
     public void setModel(BestandTableModel model) {
         this.model = model;
     }
 
-    public File[] getFiles()
+    public List<Bestand> getFiles()
     {
        return bestandLijst.GetFiles();
     }
