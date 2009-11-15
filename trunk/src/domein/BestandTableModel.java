@@ -39,18 +39,16 @@ public class BestandTableModel extends AbstractTableModel {
             case 0:
                 return controller.getBestanden().get(row).getBestand().getName();
             case 1:
-                return String.format(controller.getBestanden().get(row).getBestand().length() / 1000.0 + " " + "KB");
+                return String.format(controller.getBestanden().get(row).getSize() /1000 + " " + "KB");
             default:
                 return null;
         }
 
     }
 
-    public Class getColumnClass(
-            int c) {
-        return getValueAt(0, c).getClass();
-    }
 
+
+    @Override
     public String getColumnName(
             int col) {
         return columnNames[col];

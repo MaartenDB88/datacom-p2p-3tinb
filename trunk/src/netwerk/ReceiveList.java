@@ -6,21 +6,17 @@ package netwerk;
 
 import domein.Bestand;
 import domein.DomeinController;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,9 +58,10 @@ public class ReceiveList implements Runnable {
                 InputStream is = sock.getInputStream();
                 ObjectInputStream o = new ObjectInputStream(is);
 
-                File[] files = (File[]) o.readObject();
-                for (File f : files) {
-                    controller.addFile(new Bestand(f, sock.getLocalAddress().toString()));
+                List<Bestand> files = (List<Bestand>) o.readObject();
+                for (Bestand b : files) {
+                   b.setIpAdress(sock.getLocalAddress().toString());
+                    controller.addFile(b);
                 }
                 o.close();
                 sock.close();

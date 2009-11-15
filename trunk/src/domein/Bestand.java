@@ -5,20 +5,30 @@
 package domein;
 
 import java.io.File;
+import java.io.Serializable;
 import java.net.InetAddress;
 
 /**
  *
  * @author Maarten
  */
-public class Bestand {
+public class Bestand implements Serializable {
 
   private  File bestand;
   private  String ipAdress;
+  private double size;
 
-    public Bestand(File bestand, String ipAdress) {
+    public double getSize() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
+    }
+
+    public Bestand(File bestand, double size) {
         this.bestand = bestand;
-        this.ipAdress = ipAdress;
+        this.size = size;
     }
 
     public File getBestand() {

@@ -1,9 +1,11 @@
 package netwerk;
 
+import domein.Bestand;
 import domein.DomeinController;
 import java.io.*;
 import java.io.ObjectOutputStream;
 import java.net.*;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,7 +20,10 @@ public class SendList implements Runnable {
     public void run() {
         MulticastSocket socket = null;
         InetAddress address;
+
         try {
+          
+            String test = "/" + InetAddress.getLocalHost().getHostAddress();
             socket = new MulticastSocket(4446);
             address = InetAddress.getByName("230.0.0.1");
 
@@ -31,11 +36,15 @@ public class SendList implements Runnable {
                 byte[] buf = new byte[256];
                 packet = new DatagramPacket(buf, buf.length);
                 socket.receive(packet);
-                File[] files = controller.getFiles();
-                // ServerSocket servsock = new ServerSocket(13267);
+
+// VERWIJDER COMMENTS ZODAT HIJ ZIJN EIGEN LIJST NIET KRIJGT
+//               if(!test.equals(packet.getAddress().toString()))
+//               {
+                List<Bestand> files = controller.getFiles();
+
                 System.out.println("Waiting...");
 
-                // Socket sock2 = servsock.accept();
+
                 Socket sock = new Socket(packet.getAddress(), 13267);
                 System.out.println("Accepted connection : " + sock);
 
@@ -44,10 +53,10 @@ public class SendList implements Runnable {
 
                 System.out.println("Sending...");
 
-                sock.close();               
+                sock.close();
+ //            }
             }
-            //socket.leaveGroup(address);
-            // socket.close();
+
 
         } catch (Exception ex) {
 
