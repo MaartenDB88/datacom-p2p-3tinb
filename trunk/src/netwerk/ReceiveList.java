@@ -6,7 +6,6 @@ package netwerk;
 
 import domein.Bestand;
 import domein.DomeinController;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -16,7 +15,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,41 +33,48 @@ public class ReceiveList implements Runnable {
         controller = c;
         servsock = s;
 
+
     }
 
     public void run() {
         try {
+
+            
             dgSocket = new DatagramSocket(4445);
             byte[] buffer = new byte[256];
             String dString = "!!";
             buffer = dString.getBytes();
             // send it
+
+            // System.out.println("Send me the the list");
             InetAddress group = InetAddress.getByName("230.0.0.1");
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, group, 4446);
             dgSocket.send(packet);
             dgSocket.close();
 
-            
+
             while (true) {
-                //System.out.println("Gimme the goods");
-                Socket sock = servsock.accept();
-                //Socket sock = new Socket("127.0.0.1", 13267);
+                if (test) {
+                    Socket sock = servsock.accept();
+                    System.out.println("Gimme the goods");
+                    //Socket sock = new Socket("127.0.0.1", 13267);
 
-                InputStream is = sock.getInputStream();
-                ObjectInputStream o = new ObjectInputStream(is);
+                    InputStream is = sock.getInputStream();
+                    ObjectInputStream o = new ObjectInputStream(is);
 
-                List<Bestand> files = (List<Bestand>) o.readObject();
-                for (Bestand b : files) {
-                   b.setIpAdress(sock.getLocalAddress().toString());
-                    controller.addFile(b);
+                    Bestand[] files = (Bestand[]) o.readObject();
+                    for (Bestand b : files) {
+                        int aantal = sock.getLocalAddress().toString().length();
+                        b.setIpAdress(sock.getInetAddress().toString().substring(1, aantal));
+                        controller.addFile(b);
+                    }
+                    o.close();
+                    sock.close();
+                    System.out.println("List received");
                 }
-                o.close();
-                sock.close();
-                
-              
             }
-              
-              
+
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ReceiveList.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SocketException ex) {
@@ -82,4 +87,7 @@ public class ReceiveList implements Runnable {
 
     }
 
+    public void setTest(boolean test) {
+        this.test = test;
+    }
 }

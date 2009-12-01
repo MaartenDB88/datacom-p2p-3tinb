@@ -23,8 +23,8 @@ public class BestandTableModel extends AbstractTableModel {
     }
 
     public int getRowCount() {
-       
-      return controller.getBestanden().size();
+
+        return controller.getFiles().size();
 
     }
 
@@ -32,23 +32,30 @@ public class BestandTableModel extends AbstractTableModel {
         return columnNames.length;
     }
 
-    public Object getValueAt(
-            int row, int col) {
+    public Object getValueAt(int row, int col) {
+
 
         switch (col) {
+
             case 0:
-                return controller.getBestanden().get(row).getBestand().getName();
+                return controller.getFiles().get(row).getBestand().getName();
             case 1:
-                return String.format(controller.getBestanden().get(row).getSize() /1000 + " " + "KB");
+                return String.format(controller.getFiles().get(row).getSize() / 1000.0 + " " + "KB");
+            case 2:
+                return controller.getFiles().get(row);
             default:
                 return null;
+
         }
+
 
     }
 
+    public Class getColumnClass(
+            int c) {
+        return getValueAt(0, c).getClass();
+    }
 
-
-    @Override
     public String getColumnName(
             int col) {
         return columnNames[col];
