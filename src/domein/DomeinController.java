@@ -29,10 +29,6 @@ public class DomeinController {
 
     }
 
-    public List<Bestand> getBestanden() {
-        return files;
-    }
-
     public void addFile(Bestand bestand) {
         files.add(bestand);
         model.update();
@@ -48,12 +44,21 @@ public class DomeinController {
 
     public List<Bestand> getFiles()
     {
-       return bestandLijst.GetFiles();
+       return files;
+    }
+    public Bestand[] getBestanden()
+    {
+        return bestandLijst.getBestanden();
     }
 
     public void deleteList()
     {
         files = new ArrayList<Bestand>();
+    }
+
+    public String getDirectory()
+    {
+        return bestandLijst.getDirectory();
     }
 
 }

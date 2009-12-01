@@ -25,12 +25,12 @@ public class BestandLijst {
 
     public BestandLijst() {
         bestanden = new ArrayList<Bestand>();
-          }
+    }
 
     public String getDirectory() {
         String directory = null;
         try {
-            FileInputStream fstream = new FileInputStream("c://Info.txt");
+            FileInputStream fstream = new FileInputStream("Info.txt");
 
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -49,44 +49,31 @@ public class BestandLijst {
     public void setDirectory(String directory) {
         try {
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter("c://Info.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("Info.txt"));
             bw.write(directory);
             bw.close();
 
         } catch (IOException ex) {
         }
-
-
-
     }
-/*
-    public void saveFiles() {
 
 
+    public Bestand[] getBestanden() {
+        int i = 0;
         File pathName = new File(getDirectory());
         File[] files = pathName.listFiles();
-        Bestand b;
-        for (File f : files) {
-            if (f.isFile()) {
-                b = new Bestand(f, "A1");
-
-                bestanden.add(b);
-            }
+        List<File> fileLijst = new ArrayList<File>();
+        for(File f : files)
+        {
+            if(f.isFile())
+            fileLijst.add(f);
         }
-    }
- */
+        Bestand[] bestanden = new Bestand[fileLijst.size()];
 
-    public List<Bestand> GetFiles() {
-        File pathName = new File(getDirectory());
-        File[] files = pathName.listFiles();
-        
-        Bestand b;
-        for (File f : files) {
-            if (f.isFile()) {
-                b = new Bestand(f, f.length());
-
-                bestanden.add(b);
-            }
+        for(File f:fileLijst)
+        {
+            bestanden[i] = new Bestand(f);
+            i++;
         }
         return bestanden;
     }

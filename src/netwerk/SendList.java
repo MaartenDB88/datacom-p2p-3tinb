@@ -5,7 +5,6 @@ import domein.DomeinController;
 import java.io.*;
 import java.io.ObjectOutputStream;
 import java.net.*;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,9 +19,7 @@ public class SendList implements Runnable {
     public void run() {
         MulticastSocket socket = null;
         InetAddress address;
-
         try {
-          
             String test = "/" + InetAddress.getLocalHost().getHostAddress();
             socket = new MulticastSocket(4446);
             address = InetAddress.getByName("230.0.0.1");
@@ -35,26 +32,26 @@ public class SendList implements Runnable {
 
                 byte[] buf = new byte[256];
                 packet = new DatagramPacket(buf, buf.length);
+                System.out.println("Waiting to Send list...");
                 socket.receive(packet);
+                if (!test.equals(packet.getAddress().toString())) {
+                    {
 
-// VERWIJDER COMMENTS ZODAT HIJ ZIJN EIGEN LIJST NIET KRIJGT
-//               if(!test.equals(packet.getAddress().toString()))
-//               {
-                List<Bestand> files = controller.getFiles();
+                        Bestand[] files = controller.getBestanden();
+                        Socket sock = new Socket(packet.getAddress(), 13268);
+                        System.out.println("Sending list too : " + sock);
 
-                System.out.println("Waiting...");
+                        ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
+                        os.writeObject(files);
+
+                        
+
+                        sock.close();
+                        System.out.println("Sending list completed");
+                    }
 
 
-                Socket sock = new Socket(packet.getAddress(), 13267);
-                System.out.println("Accepted connection : " + sock);
-
-                ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
-                os.writeObject(files);
-
-                System.out.println("Sending...");
-
-                sock.close();
- //            }
+                }
             }
 
 

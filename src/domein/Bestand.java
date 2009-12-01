@@ -12,23 +12,24 @@ import java.net.InetAddress;
  *
  * @author Maarten
  */
-public class Bestand implements Serializable {
+public class Bestand implements Serializable  {
 
   private  File bestand;
   private  String ipAdress;
-  private double size;
+  private  long size;
 
-    public double getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(double size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
-    public Bestand(File bestand, double size) {
+
+    public Bestand(File bestand) {
         this.bestand = bestand;
-        this.size = size;
+         size =  bestand.length();
     }
 
     public File getBestand() {
