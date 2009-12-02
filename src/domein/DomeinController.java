@@ -6,6 +6,7 @@ package domein;
 
 import java.util.ArrayList;
 import java.util.List;
+import netwerk.NetwerkController;
 
 /**
  *
@@ -13,15 +14,25 @@ import java.util.List;
  */
 public class DomeinController {
 
+    public NetwerkController getnController() {
+        return nController;
+    }
+
     List<Bestand> files;
     private BestandLijst bestandLijst;
     BestandTableModel model;
-    Downloads downloads = new Downloads();
+
+
+    Downloads downloads = null;
+    DownloadsListModel downloadModel = null;
+    NetwerkController nController = null;
        
     public DomeinController() {
         files = new ArrayList<Bestand>();
         bestandLijst = new BestandLijst();
-
+        nController = new NetwerkController(this);
+        downloadModel = new DownloadsListModel(this);
+        downloads = new Downloads(downloadModel);
     }
 
     public Downloads getDownloads() {
@@ -61,18 +72,23 @@ public class DomeinController {
         return bestandLijst.getDirectory();
     }
 
-    public void addDownload(String name)
+    public int addDownload(String name)
     {
-        downloads.addDownload(name);
+      return downloads.addDownload(name);
     }
 
-    public void changeProgressDownload(double progress)
+    public void changeProgressDownload(double progress,int index)
     {
-        downloads.updateProgress(progress);
+        downloads.updateProgress(progress,index);
     }
 
-    public void deleteDownload()
+    public void deleteDownload(int index)
     {
-        downloads.deleteDownload();
+        downloads.deleteDownload(index);
+        nController.DownloadEnded(index);
+
+    }
+    public DownloadsListModel getDownloadModel() {
+        return downloadModel;
     }
 }

@@ -4,16 +4,13 @@
  */
 package netwerk;
 
-import domein.Bestand;
-import domein.DomeinController;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  *
@@ -22,17 +19,23 @@ import java.util.concurrent.Executors;
 public class UploadListener implements Runnable {
 
     ServerSocket serverSocket = null;
-    DomeinController dController = null;
+    NetwerkController controller =null;
 
-    public UploadListener(ServerSocket socket,DomeinController d) {
-        dController = d;
+    File file;
+
+    public UploadListener(ServerSocket socket,NetwerkController c) {
+        this.controller = c;
         this.serverSocket = socket;
     }
 
     public void run() {
 
-        OutputStream out = null;
         Socket socket = null;
+        DataInputStream in = null;
+        DataOutputStream out = null;
+        int length;
+
+        byte[] bytes = new byte[819200];
         try {
             while (true) {
 
@@ -44,17 +47,19 @@ public class UploadListener implements Runnable {
                     InputStream is = socket.getInputStream();
                     ObjectInputStream o = new ObjectInputStream(is);
 
-                    File file = (File) o.readObject();
+                    controller.StartUpload((File) o.readObject());
+                   
 
-                    new UploadFile(file, serverSocket,dController).run();
-                    socket.close();
-                      
-                } catch (Exception ex) {System.out.println(ex.toString() + "UploadListener 1"); }
-
+                } catch (Exception ex) {
+                    System.out.println(ex.toString() + " UploadListener 1");
+                     socket.close();
+                }
+                socket.close();
             }
 
         } catch (Exception e) {
-            System.out.println(e.toString()+ "UploadListener 2");
+            System.out.println(e.toString() + " UploadListener 2");
+            
         }
 
 

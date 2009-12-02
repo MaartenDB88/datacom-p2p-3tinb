@@ -14,44 +14,70 @@ import java.util.List;
  */
 public class Downloads {
 
-    Download[] downloadLijst = new Download[1];
+    int id = 0;
+    HashMap map = new HashMap();
     List<Download> downloads = new ArrayList<Download>();
-    DownloadsTableModel model;
 
-    public Downloads(){
+   DownloadsListModel test;
 
-        downloadLijst[0] = new Download("NO DOWNLOADS");
-    }
-    public void addDownload(String name) {
-       downloads.add(new Download(name));
-        // downloadLijst[0] = new Download(name);
-        Update();
+    public Downloads(DownloadsListModel test){
+        this.test = test;
     }
 
-    public void deleteDownload() {
+    /**
+     *
+     * @return ID van de download.
+     *
+    **/
+    public int getId()
+    {
+        return id++;
+    }
+    public int addDownload(String name) {
+        int i = getId();      
+         downloads.add(new Download(name,i));
+          test.fireContentsChanged(null, i, i);
+        return i;
+    }
+
+    public boolean deleteDownload(int index) {
        
-        downloads.remove(0);
-        // downloadLijst[0] = new Download("NO DOWNLOADS");
-        Update();
+
+        for(Download d :downloads)
+        {
+            if(d.id ==index)
+            {
+                downloads.remove(d);
+                test.fireContentsChanged(null, index, index);
+              
+                return true;
+            }
+        }        
+       return false;
     }
 
-    public void updateProgress(double p) {
-        downloads.get(0).progress = (int)p;
-        //downloadLijst[0].progress = (int)p;
-        Update();
+    public boolean updateProgress(double p,int index) {
+
+         for(Download d :downloads)
+        {
+            if(d.id ==index)
+            {
+                d.setProgress((int)p);
+               test.fireContentsChanged(null, index, index);
+                              
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Download[] getLijst() {
 
-        return downloads.toArray(new Download[downloads.size()] );
-      //  return downloadLijst;
+        return downloads.toArray(new Download[downloads.size()]);
+
     }
 
-    public void setModel(DownloadsTableModel d) {
-        model = d;
-    }
 
-    public void Update() {
-        model.update();
-    }
+
 }

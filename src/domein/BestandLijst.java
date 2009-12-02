@@ -30,7 +30,7 @@ public class BestandLijst {
     public String getDirectory() {
         String directory = null;
         try {
-            FileInputStream fstream = new FileInputStream("Info.txt");
+            FileInputStream fstream = new FileInputStream("ConfigBinfP2P");
 
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -49,7 +49,7 @@ public class BestandLijst {
     public void setDirectory(String directory) {
         try {
 
-            BufferedWriter bw = new BufferedWriter(new FileWriter("Info.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("ConfigBinfP2P"));
             bw.write(directory);
             bw.close();
 

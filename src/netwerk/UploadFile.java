@@ -4,7 +4,6 @@
  */
 package netwerk;
 
-import domein.DomeinController;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -21,8 +20,10 @@ public class UploadFile implements Runnable {
     File file;
     ServerSocket serverSocket = null;
     
-    public UploadFile(File b, ServerSocket s,DomeinController d) {
-        file = b;
+    
+    
+    public UploadFile(File b, ServerSocket s) {
+        file = b;        
         serverSocket = s;
     }
 
@@ -32,7 +33,7 @@ public class UploadFile implements Runnable {
         DataOutputStream out = null;
         int length;
      
-        byte[] bytes = new byte[1024];
+        byte[] bytes = new byte[8192];
 
         try {
             System.out.println("Waiting Upload ...");
@@ -51,7 +52,7 @@ public class UploadFile implements Runnable {
             socket.close();
             System.out.println("Sending File Completed");
         } catch (Exception ex) {
-            System.out.println(ex.toString() + "Upload.java");
+            System.out.println(ex.toString() + " Upload.java");
         }
     }
 }
