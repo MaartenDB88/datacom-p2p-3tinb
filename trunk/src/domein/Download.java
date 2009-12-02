@@ -11,19 +11,25 @@ package domein;
  */
 public class Download {
 
-    public Download(String name) {
+    public Download(String name,int id) {
+        this.id = id;
         this.name = name;
     }
+    int id;
 
     String name;
-   int progress = 0;
+   String progress = "Waiting ...";
 
-    public int getProgress() {
+    public int getId() {
+        return id;
+    }
+
+    public String getProgress() {
         return progress;
     }
 
     public void setProgress(int progress) {
-        this.progress = progress;
+        this.progress = Integer.toString(progress)  + " %";
     }
 
 

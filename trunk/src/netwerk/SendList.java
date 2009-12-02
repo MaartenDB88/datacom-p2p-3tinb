@@ -2,7 +2,6 @@ package netwerk;
 
 import domein.Bestand;
 import domein.DomeinController;
-import java.io.*;
 import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.logging.Level;
@@ -34,24 +33,17 @@ public class SendList implements Runnable {
                 packet = new DatagramPacket(buf, buf.length);
                 System.out.println("Waiting to Send list...");
                 socket.receive(packet);
-                if (!test.equals(packet.getAddress().toString())) {
-                    {
+               if (!test.equals(packet.getAddress().toString())) {
 
                         Bestand[] files = controller.getBestanden();
-                        Socket sock = new Socket(packet.getAddress(), 13268);
+                        Socket sock = new Socket(packet.getAddress(),13268);
                         System.out.println("Sending list too : " + sock);
 
                         ObjectOutputStream os = new ObjectOutputStream(sock.getOutputStream());
                         os.writeObject(files);
-
-                        
-
                         sock.close();
-                        System.out.println("Sending list completed");
-                    }
-
-
-                }
+                        System.out.println("Sending list completed");        
+               }
             }
 
 
