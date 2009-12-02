@@ -13,6 +13,7 @@ package gui;
 import domein.Bestand;
 import domein.BestandTableModel;
 import domein.DomeinController;
+import domein.DownloadsTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.ServerSocket;
@@ -31,23 +32,25 @@ public class Main extends javax.swing.JFrame implements ActionListener {
     DomeinController controller;
     String stopRefresh = null;
     private BestandTableModel tableModel;
+    private DownloadsTableModel downloadsModel;
     ExecutorService threadListRefresh = null;
     NetwerkController networkController = null;
-    
-  
+
     ServerSocket serverSocket = null;
 
     public Main(DomeinController controller) {
         this.setTitle("BINF P2P");
         this.controller = controller;
         tableModel = new BestandTableModel(controller);
+        downloadsModel = new DownloadsTableModel(controller.getDownloads());
         networkController = new NetwerkController(controller);
         controller.setModel(tableModel);
+       
+        
         initComponents();
-        jTable1.setModel(tableModel);
-
-
-    }
+        jTable2.setModel(downloadsModel);
+        jTable1.setAutoCreateRowSorter(true);
+          }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -68,6 +71,7 @@ public class Main extends javax.swing.JFrame implements ActionListener {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPaneDownloads = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openMenuItem = new javax.swing.JMenuItem();
@@ -87,17 +91,7 @@ public class Main extends javax.swing.JFrame implements ActionListener {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jTable1.setModel(tableModel);
         jScrollPane1.setViewportView(jTable1);
 
         jButtonDownload.setText("Download");
@@ -143,8 +137,6 @@ public class Main extends javax.swing.JFrame implements ActionListener {
                     .addComponent(jButton2)))
         );
 
-        jButtonDownload.getAccessibleContext().setAccessibleName("Download");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -167,7 +159,21 @@ public class Main extends javax.swing.JFrame implements ActionListener {
         );
 
         jTabbedPane.addTab("Lijst", jPanel1);
-        jTabbedPane.addTab("Downloads", jScrollPaneDownloads);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPaneDownloads.setViewportView(jTable2);
+
+        jTabbedPane.addTab("Download", jScrollPaneDownloads);
 
         fileMenu.setText("File");
 
@@ -309,6 +315,7 @@ public class Main extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JScrollPane jScrollPaneDownloads;
     private javax.swing.JTabbedPane jTabbedPane;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem pasteMenuItem;

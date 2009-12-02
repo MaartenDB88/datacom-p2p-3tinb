@@ -15,6 +15,7 @@ public class BestandTableModel extends AbstractTableModel {
 
     private DomeinController controller;
     private String[] columnNames = {"Name", "Size"};
+    
 
     public BestandTableModel(DomeinController c) {
 
@@ -40,7 +41,11 @@ public class BestandTableModel extends AbstractTableModel {
             case 0:
                 return controller.getFiles().get(row).getBestand().getName();
             case 1:
-                return String.format(controller.getFiles().get(row).getSize() / 1000.0 + " " + "KB");
+                int size = (int) controller.getFiles().get(row).getSize() / 1000;
+                if(size > 1000)
+                return String.format(size / 1000.0 + " " + "MB");
+                else
+                    return String.format(size + " " + "KB");
             case 2:
                 return controller.getFiles().get(row);
             default:

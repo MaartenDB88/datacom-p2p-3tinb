@@ -30,18 +30,20 @@ public class DownloadFile implements Runnable {
     Socket socket = null;
     DataInputStream fileIn = null;
     DataOutputStream fileOut = null;
-    byte[] bytes = new byte[8192];
+    byte[] bytes = new byte[1024];
     boolean stopDownload = false;
     boolean pauseDownload = false;
     DomeinController dController;
-   
+    int id;
     int length;
+    double totalBytes;
+    double bytesDone = 0;
+    int progress = 0;
 
-        public DownloadFile(DomeinController c)
-    {
+    public DownloadFile(DomeinController c, int id) {
+        this.id = id;
         dController = c;
     }
-
 
     public void run() {
 
@@ -54,30 +56,42 @@ public class DownloadFile implements Runnable {
             System.out.println("Initialize Download");
             socket = new Socket(ipAddress, port);
             fileIn = new DataInputStream(socket.getInputStream());
-          
-            fileOut = new DataOutputStream(new FileOutputStream(new File(dController.getDirectory() + "\\" +  file.getName())));
+            
+            fileOut = new DataOutputStream(new FileOutputStream(new File(dController.getDirectory() + "\\" + file.getName())));
             System.out.println("Begin Download");
-
-            while ((length= fileIn.read(bytes))!=-1  ) {
-                
-                fileOut.write(bytes,0,length);
+            
+            while ((length = fileIn.read(bytes)) != -1) {
+                bytesDone = bytesDone + length;
+                fileOut.write(bytes, 0, length);
                 fileOut.flush();
+                progress();
+                
 
             }
 
             fileIn.close();
-            fileOut.close();            
+            fileOut.close();
             socket.close();
             System.out.println("Download ended");
+            dController.deleteDownload();
 
         } catch (Exception e) {
             System.out.println(e.toString() + "Download.java");
         }
     }
 
+    public void progress()
+    {
+        if(((int)((bytesDone / totalBytes)*100))>progress)
+        {
+           dController.changeProgressDownload((bytesDone / totalBytes)*100);
+        }
+    }
+
     public void Download(Bestand b) {
         file = b.getBestand();
         bestand = b;
+        totalBytes = (int) bestand.getSize();
         ipAddress = b.getIpAdress();
         pauseDownload = false;
         stopDownload = false;

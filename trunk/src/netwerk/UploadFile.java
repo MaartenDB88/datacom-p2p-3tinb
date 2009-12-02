@@ -4,14 +4,11 @@
  */
 package netwerk;
 
-import domein.Bestand;
 import domein.DomeinController;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.OutputStream;
-import java.lang.Byte;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -35,7 +32,7 @@ public class UploadFile implements Runnable {
         DataOutputStream out = null;
         int length;
      
-        byte[] bytes = new byte[8192];
+        byte[] bytes = new byte[1024];
 
         try {
             System.out.println("Waiting Upload ...");

@@ -50,12 +50,14 @@ public class NetwerkController {
 
     public int StartDownload(Bestand bestand) {
 
-        DownloadFile download = new DownloadFile(domeinController);
+        domeinController.addDownload(bestand.getBestand().getName());
+        DownloadFile download = new DownloadFile(domeinController,downloadId);
+        
         download.Download(bestand);
         Thread thread = new Thread(download);
         thread.start();
-        downloadMap.put(downloadId,download);
-        return ++downloadId;
+      
+        return 0;
 
     }
 
