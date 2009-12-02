@@ -4,14 +4,8 @@
  */
 package domein;
 
-import domein.BestandLijst;
-import netwerk.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  *
@@ -22,11 +16,16 @@ public class DomeinController {
     List<Bestand> files;
     private BestandLijst bestandLijst;
     BestandTableModel model;
-    
+    Downloads downloads = new Downloads();
+       
     public DomeinController() {
         files = new ArrayList<Bestand>();
         bestandLijst = new BestandLijst();
 
+    }
+
+    public Downloads getDownloads() {
+        return downloads;
     }
 
     public void addFile(Bestand bestand) {
@@ -40,9 +39,10 @@ public class DomeinController {
     }
     public void setModel(BestandTableModel model) {
         this.model = model;
+     
     }
 
-    public List<Bestand> getFiles()
+      public List<Bestand> getFiles()
     {
        return files;
     }
@@ -61,4 +61,18 @@ public class DomeinController {
         return bestandLijst.getDirectory();
     }
 
+    public void addDownload(String name)
+    {
+        downloads.addDownload(name);
+    }
+
+    public void changeProgressDownload(double progress)
+    {
+        downloads.updateProgress(progress);
+    }
+
+    public void deleteDownload()
+    {
+        downloads.deleteDownload();
+    }
 }
