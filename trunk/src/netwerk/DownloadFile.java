@@ -57,7 +57,7 @@ public class DownloadFile implements Runnable {
             socket = new Socket(ipAddress, port);
             fileIn = new DataInputStream(socket.getInputStream());
 
-            fileOut = new DataOutputStream(new FileOutputStream(new File(dController.getDirectory() + file.getName())));
+            fileOut = new DataOutputStream(new FileOutputStream(new File(dController.getDirectory() + "\\" + file.getName())));
             System.out.println("Begin Download");
 
             while ((length = fileIn.read(bytes)) != -1 && stopDownload != true) {
